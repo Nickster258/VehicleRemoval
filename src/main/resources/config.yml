@@ -1,0 +1,5 @@
+## Boat removal settings
+proactive_boat_removal: false
+boat_removal_delay: 5
+proactive_cart_removal: false
+cart_removal_delay: 5

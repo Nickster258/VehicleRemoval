@@ -1,0 +1,5 @@
+name: VehicleRemoval
+main: org.stonecipher.VehicleRemoval.Main
+version: 1.0
+api-version: 1.13
+commands:
