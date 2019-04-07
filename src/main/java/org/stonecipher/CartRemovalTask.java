@@ -39,8 +39,13 @@ public class CartRemovalTask implements Listener {
         Chunk chunk = e.getChunk();
         for (Entity entity : chunk.getEntities()) {
             if (entity instanceof Minecart) {
+                Block blockBelow = entity.getLocation().getBlock();
                 if (entity.getPassengers().size() == 0) {
-                    entity.remove();
+                    if ((blockBelow.getType() == Material.RAIL) || (blockBelow.getType() == Material.DETECTOR_RAIL) || (blockBelow.getType() == Material.ACTIVATOR_RAIL) || (blockBelow.getType() == Material.POWERED_RAIL)) {
+                        removeFromPurgeQueue((Vehicle) entity.getVehicle());
+                    } else {
+                        addVehicleToPurge((Vehicle) entity.getVehicle());
+                    }
                 }
             }
         }
@@ -70,7 +75,7 @@ public class CartRemovalTask implements Listener {
     public void onEntityLeaveCart(VehicleExitEvent e) {
         if ((e.getVehicle() instanceof Minecart) && (e.getExited() instanceof Player)) {
             Block blockBelow = e.getVehicle().getLocation().getBlock();
-            if (blockBelow.getType() != Material.RAIL) {
+            if ((blockBelow.getType() == Material.RAIL) || (blockBelow.getType() == Material.DETECTOR_RAIL) || (blockBelow.getType() == Material.ACTIVATOR_RAIL) || (blockBelow.getType() == Material.POWERED_RAIL)) {
                 addVehicleToPurge(e.getVehicle());
                 // this.plugin.getLogger().info("Exited cart, attempting purge...");
             }
