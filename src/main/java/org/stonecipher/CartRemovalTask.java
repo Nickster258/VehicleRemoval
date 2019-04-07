@@ -86,7 +86,7 @@ public class CartRemovalTask implements Listener {
     public void onCartCreationEvent(VehicleCreateEvent e) {
         if (e.getVehicle() instanceof Minecart) {
             Block blockBelow = e.getVehicle().getLocation().getBlock();
-            if ((blockBelow.getType() != Material.RAIL) && (blockBelow.getType() != Material.DETECTOR_RAIL) && (blockBelow.getType() != Material.ACTIVATOR_RAIL) && (blockBelow.getType() != Material.POWERED_RAIL)) {
+            if ((blockBelow.getType() != Material.RAIL) || (blockBelow.getType() != Material.DETECTOR_RAIL) || (blockBelow.getType() != Material.ACTIVATOR_RAIL) || (blockBelow.getType() != Material.POWERED_RAIL)) {
                 addVehicleToPurge(e.getVehicle());
                 // this.plugin.getLogger().info("Created cart, attempting purge...");
             }
