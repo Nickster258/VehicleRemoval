@@ -37,6 +37,7 @@ public class BoatRemovalTask implements Listener {
         for (Entity entity : chunk.getEntities()) {
             if (entity instanceof Boat) {
                 if (entity.getPassengers().size() == 0) {
+                    //this.plugin.getLogger().info("Unloading boat ON CHUNK LOAD.");
                     entity.remove();
                 }
             }

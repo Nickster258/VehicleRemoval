@@ -41,9 +41,13 @@ public class CartRemovalTask implements Listener {
             if (entity instanceof Minecart) {
                 Block blockBelow = entity.getLocation().getBlock();
                 if (entity.getPassengers().size() == 0) {
-                    if ((blockBelow.getType() == Material.RAIL) || (blockBelow.getType() == Material.DETECTOR_RAIL) || (blockBelow.getType() == Material.ACTIVATOR_RAIL) || (blockBelow.getType() == Material.POWERED_RAIL)) {
+                    if ((blockBelow.getType() == Material.RAIL) ||
+                            (blockBelow.getType() == Material.DETECTOR_RAIL) ||
+                            (blockBelow.getType() == Material.ACTIVATOR_RAIL) ||
+                            (blockBelow.getType() == Material.POWERED_RAIL)) {
                         removeFromPurgeQueue((Vehicle) entity.getVehicle());
                     } else {
+                        //this.plugin.getLogger().info("Unloading cart ON CHUNK LOAD since no rail associated.");
                         addVehicleToPurge((Vehicle) entity.getVehicle());
                     }
                 }
@@ -55,7 +59,10 @@ public class CartRemovalTask implements Listener {
     public void onCartMove(VehicleMoveEvent e) {
         if (e.getVehicle() instanceof Minecart) {
             Block blockBelow = e.getTo().getBlock();
-            if ((blockBelow.getType() == Material.RAIL) || (blockBelow.getType() == Material.DETECTOR_RAIL) || (blockBelow.getType() == Material.ACTIVATOR_RAIL) || (blockBelow.getType() == Material.POWERED_RAIL)) {
+            if ((blockBelow.getType() == Material.RAIL) ||
+                    (blockBelow.getType() == Material.DETECTOR_RAIL) ||
+                    (blockBelow.getType() == Material.ACTIVATOR_RAIL) ||
+                    (blockBelow.getType() == Material.POWERED_RAIL)) {
                 removeFromPurgeQueue(e.getVehicle());
             } else {
                 addVehicleToPurge(e.getVehicle());
@@ -75,7 +82,10 @@ public class CartRemovalTask implements Listener {
     public void onEntityLeaveCart(VehicleExitEvent e) {
         if ((e.getVehicle() instanceof Minecart) && (e.getExited() instanceof Player)) {
             Block blockBelow = e.getVehicle().getLocation().getBlock();
-            if ((blockBelow.getType() == Material.RAIL) || (blockBelow.getType() == Material.DETECTOR_RAIL) || (blockBelow.getType() == Material.ACTIVATOR_RAIL) || (blockBelow.getType() == Material.POWERED_RAIL)) {
+            if ((blockBelow.getType() != Material.RAIL) &&
+                    (blockBelow.getType() != Material.DETECTOR_RAIL) &&
+                    (blockBelow.getType() != Material.ACTIVATOR_RAIL) &&
+                    (blockBelow.getType() != Material.POWERED_RAIL)) {
                 addVehicleToPurge(e.getVehicle());
                 // this.plugin.getLogger().info("Exited cart, attempting purge...");
             }
@@ -86,7 +96,10 @@ public class CartRemovalTask implements Listener {
     public void onCartCreationEvent(VehicleCreateEvent e) {
         if (e.getVehicle() instanceof Minecart) {
             Block blockBelow = e.getVehicle().getLocation().getBlock();
-            if ((blockBelow.getType() != Material.RAIL) || (blockBelow.getType() != Material.DETECTOR_RAIL) || (blockBelow.getType() != Material.ACTIVATOR_RAIL) || (blockBelow.getType() != Material.POWERED_RAIL)) {
+            if ((blockBelow.getType() != Material.RAIL) &&
+                    (blockBelow.getType() != Material.DETECTOR_RAIL) &&
+                    (blockBelow.getType() != Material.ACTIVATOR_RAIL) &&
+                    (blockBelow.getType() != Material.POWERED_RAIL)) {
                 addVehicleToPurge(e.getVehicle());
                 // this.plugin.getLogger().info("Created cart, attempting purge...");
             }
@@ -111,7 +124,7 @@ public class CartRemovalTask implements Listener {
         new BukkitRunnable() {
             //@Override
             public void run() {
-                removeUnusedBoats();
+                removeUnusedCarts();
             }
         }.runTaskLater(this.plugin, this.delay / 50 + 1);
         // important to have the extra tick here because otherwise it
@@ -133,7 +146,7 @@ public class CartRemovalTask implements Listener {
         // this.plugin.getLogger().info("Count: " + cartPurgeQueue.size());
     }
 
-    private void removeUnusedBoats() {
+    private void removeUnusedCarts() {
         // this.plugin.getLogger().info("Count: " + cartPurgeQueue.size());
         List<Entry<Vehicle, Long>> toRemove = new ArrayList();
         for (Entry<Vehicle, Long> tuple : cartPurgeQueue) {
@@ -142,7 +155,10 @@ public class CartRemovalTask implements Listener {
             if ((time + delay < System.currentTimeMillis()) && vehicle.isEmpty()) {
                 if (vehicle instanceof Minecart) {
                     Block blockBelow = vehicle.getLocation().getBlock();
-                    if (blockBelow.getType() != Material.RAIL) {
+                    if ((blockBelow.getType() != Material.RAIL) &&
+                            (blockBelow.getType() != Material.DETECTOR_RAIL) &&
+                            (blockBelow.getType() != Material.ACTIVATOR_RAIL) &&
+                            (blockBelow.getType() != Material.POWERED_RAIL)) {
                         // this.plugin.getLogger().info("Found a thing to purge, adding it...");
                         vehicle.remove();
                         toRemove.add(tuple);
