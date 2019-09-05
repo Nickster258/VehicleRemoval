@@ -68,6 +68,9 @@ public class BoatRemovalTask implements Listener {
     }
 
     private void addVehicleToPurge(Vehicle v) {
+        if (v == null) {
+            return;
+        }
         for (Entry<Vehicle, Long> tuple : boatPurgeQueue) {
             Vehicle vehicle = (Vehicle) tuple.getKey();
             if (vehicle.equals(v)) {

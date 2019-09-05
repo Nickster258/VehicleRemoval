@@ -94,6 +94,9 @@ public class CartRemovalTask implements Listener {
     }
 
     private void addVehicleToPurge(Vehicle v) {
+        if (v == null) {
+            return;
+        }
         for (Entry<Vehicle, Long> tuple : cartPurgeQueue) {
             Vehicle vehicle = (Vehicle) tuple.getKey();
             if (vehicle.equals(v)) {
