@@ -14,11 +14,11 @@ public class VehicleRemoval extends JavaPlugin implements Listener, CommandExecu
     @Override
     public void onEnable() {
         setupConfig();
-        if (config.getBoolean("proactive_boat_removal") == true) {
+        if (config.getBoolean("proactive_boat_removal")) {
             getLogger().info("Enabling proactive boat removal...");
             new BoatRemovalTask(this, config.getInt("boat_removal_delay"));
         }
-        if (config.getBoolean("proactive_cart_removal") == true) {
+        if (config.getBoolean("proactive_cart_removal")) {
             getLogger().info("Enabling proactive cart removal...");
             new CartRemovalTask(this, config.getInt("cart_removal_delay"));
 
